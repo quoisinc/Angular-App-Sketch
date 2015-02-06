@@ -1,0 +1,43 @@
+.canvases {
+  position: relative;
+}
+.canvases {
+  width: 320px;
+  height: 400px;
+}
+.canvases canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.off {
+  display: none;
+}
+
+.loader {
+  text-align: center;
+  margin-top: 40%;
+}
+
+header {
+  height: 2em;
+}
+
+/* notification-content */
+
+.notification-content {
+  opacity: 1;
+  height: 2.5em;
+  transition: all 0.5s;
+}
+
+.notification-content.ng-hide-add,
+.notification-content.ng-hide-remove {
+  display: block!important;
+}
+
+.notification-content.ng-hide {
+  opacity: 0;
+}
+

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app=littleSketcher>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Little Sketcher</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="vendor/foundation/css/normalize.css" rel="stylesheet">
+        <link href="vendor/foundation/css/foundation.css" rel="stylesheet">
+
+        <link href="css/app.css" rel="stylesheet">
+        
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div class=row>
+
+          <header>
+            <div notifications></div>
+          </header>
+
+          <section ng-view></section>
+
+        </div>
+
+        <script id='tpls/index.html' type="text/ng-template">
+          <h1>LittleSketcher v0.1</h1>
+          <p><a href='#drawings/new' class=button>Start a drawing</a></p>
+          <p><a href='#drawings' class=button>List drawings</a></p>
+        </script>
+        <script id='tpls/drawings_new.html' type="text/ng-template">
+
+          <h1 toggle-input=drawing.name>{{state.loading ? "Loading..." : drawing.name || 'Untitled drawing'}}</h1>
+          <a href="#">Back</a>
+          
+          <div class=loader ng-show=state.loading>Loading...</div>
+
+          <div ng-hide=state.loading>
+
+            <div class=canvases ng-class="{loading:loading}">
+              <canvas drawing commands=drawing.commands width=320 height=400></canvas>
+              <canvas draw onpath=newStroke(command) width=320 height=400></canvas>
+            </div>
+
+            <button ng-click=undo() ng-disabled="drawing.commands.length == 0">Undo</button>
+            <button ng-click=redo() ng-disabled="state.undone.length == 0">Redo</button>
+            <p ng-hide=state.synced>Saving your work...</p>
+          </div>
+        </script>
+        <script id='tpls/drawings_list.html' type="text/ng-template">
+          <h1>Drawings</h1>
+          <p><a href="#">Back</a></p>
+          <p><a class="button small drawing_create" href='#drawings/new'>New Drawing</a></p>
+          <p class=loader ng-hide=drawings.$resolved>Loading...</p>
+          <ul class=drawings>
+            <li class=note ng-show='drawings.length == 0 && drawings.$resolved'>
+              No drawings yet, get drawing!
+            </li>
+            <li class=drawing ng-repeat="drawing in drawings" ng-controller=drawingListItem>
+              <span toggle-input='drawing.name' class=name>{{drawing.name || 'Unamed drawing'}}</span>
+              <a ng-href="#drawings/{{drawing.id}}" class="small button">Edit</a>
+              <a ng-click="deleteDrawing(drawing)" class="small button alert">Delete</a>
+            </li>
+          </ul>
+        </script>
+
+        <!-- Fake backend -->
+        <script src="vendor/support/sinon.js"></script>
+        <script src="vendor/support/fake-server.js"></script>
+        <script>
+          createFakeServer();
+        </script>
+
+        <!-- general libraries -->
+        <script src="vendor/underscore.js"></script>
+        <script src="vendor/jquery.js"></script> <!-- jQuery before angular so angular can augment element with it -->
+
+        <!-- angular + modules -->
+        <script src="vendor/angular/angular.js"></script>
+        <script src="vendor/angular/angular-route.js"></script>
+        <script src="vendor/angular/angular-resource.js"></script>
+        <script src="vendor/angular/angular-animate.js"></script>
+
+        <!-- our app code - angular's module system isn't a module loader, so order is important -->
+        <script src="js/toggle_input.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/routes.js"></script>
+        <script src="js/drawing.js"></script>
+
+
+    </body>
+</html>
